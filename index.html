@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Kalkulator HPP Pro</title>
+
+  <!-- PWA Wajib -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6750A4">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HPP Pro">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -13,239 +22,165 @@
     :root {--p:#6750A4;--ph:#5a4593;--s:#F8F9FA;--s2:#FFFFFF;--s3:#F1F3F4;--t1:#1F1F1F;--t2:#5F6368;}
     *{box-sizing:border-box}
     html,body{font-family:'Inter',sans-serif;background:var(--s);color:var(--t1);margin:0;padding:0}
- .app{max-width:480px;margin:0 auto;background:var(--s2);min-height:100vh;position:relative}
- .head{background:linear-gradient(135deg,var(--p),#9C27B0);color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
- .brand{font-size:20px;font-weight:800;letter-spacing:-0.5px}
- .sub{font-size:11px;opacity:0.9;margin-top:2px}
- .tabs{display:flex;background:var(--s3);padding:4px;margin:12px;border-radius:12px}
- .tab{flex:1;padding:10px;text-align:center;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;transition:all.2s}
- .tab.active{background:var(--s2);color:var(--p);box-shadow:0 1px 3px rgba(0,0,0,0.1)}
- .tab-content{display:none}.tab-content.active{display:block}
- .card{background:var(--s2);border-radius:16px;padding:16px;margin:12px;border:1px solid var(--s3);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
- .btn{border:none;border-radius:10px;padding:12px 16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all.2s;font-size:14px}
- .btn-p{background:var(--p);color:white}.btn-p:active{background:var(--ph)}
- .btn-g{background:var(--s3);color:var(--t1)}
- .btn-o{background:transparent;border:1.5px solid var(--p);color:var(--p)}
- .btn-s{padding:8px 12px;font-size:13px}
- .btn-xs{padding:6px 10px;font-size:12px}
+    .app{max-width:480px;margin:0 auto;background:var(--s2);min-height:100vh;position:relative}
+    .head{background:linear-gradient(135deg,var(--p),#9C27B0);color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
+    .brand{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+    .sub{font-size:11px;opacity:0.9;margin-top:2px}
+    .card{background:var(--s2);border-radius:16px;padding:16px;margin:12px;border:1px solid var(--s3);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+    .btn{border:none;border-radius:10px;padding:12px 16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all.2s;font-size:14px}
+    .btn-p{background:var(--p);color:white}.btn-p:active{background:var(--ph)}
+    .btn-g{background:var(--s3);color:var(--t1)}
+    .btn-s{padding:8px 12px;font-size:13px}
     input,select{width:100%;padding:12px;border:1.5px solid var(--s3);border-radius:10px;font-size:15px;background:var(--s2);font-family:inherit}
     input:focus,select:focus{outline:none;border-color:var(--p)}
     label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--t2);text-transform:uppercase;letter-spacing:0.3px}
- .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
- .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
- .bahan-row{display:grid;grid-template-columns:1.5fr 1fr 1fr 0.8fr 0.8fr 32px;gap:6px;align-items:end;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--s3)}
- .bahan-row:last-child{border-bottom:none;margin:0;padding:0}
- .mono{font-family:'Courier New',monospace}
- .total-box{background:linear-gradient(135deg,var(--p),#9C27B0);color:white;border-radius:16px;padding:20px;text-align:center;margin:12px}
- .total-lab{font-size:11px;opacity:0.9;text-transform:uppercase;letter-spacing:0.5px}
- .total-val{font-size:32px;font-weight:800;margin:6px 0;letter-spacing:-1px}
- .stat-row{display:flex;justify-content:space-around;font-size:11px;margin-top:12px;opacity:0.95}
- .price-box{background:var(--s3);border-radius:16px;padding:20px;margin:12px;text-align:center;border:2px dashed var(--p)}
- .price-val{font-size:36px;font-weight:800;color:var(--p);margin:8px 0;letter-spacing:-1.5px}
- .resep-item{padding:12px;border-bottom:1px solid var(--s3);cursor:pointer;transition:background.2s}
- .resep-item:active{background:var(--s3)}
- .resep-item:last-child{border-bottom:none}
- .resep-head{display:flex;justify-content:space-between;align-items:start;margin-bottom:4px}
- .resep-nama{font-weight:600;font-size:15px}
- .resep-kat{font-size:11px;padding:2px 8px;background:var(--s3);border-radius:6px;color:var(--t2)}
- .resep-info{display:flex;gap:12px;font-size:12px;color:var(--t2)}
- .resep-aksi{display:flex;gap:6px;margin-top:8px}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .bahan-row{display:grid;grid-template-columns:1.5fr 1fr 1fr 0.8fr 0.8fr 32px;gap:6px;align-items:end;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--s3)}
+    .bahan-row:last-child{border-bottom:none;margin:0;padding:0}
+    .mono{font-family:'Courier New',monospace}
+    .total-box{background:linear-gradient(135deg,var(--p),#9C27B0);color:white;border-radius:16px;padding:20px;text-align:center;margin:12px}
+    .total-lab{font-size:11px;opacity:0.9;text-transform:uppercase;letter-spacing:0.5px}
+    .total-val{font-size:32px;font-weight:800;margin:6px 0;letter-spacing:-1px}
+    .stat-row{display:flex;justify-content:space-around;font-size:11px;margin-top:12px;opacity:0.95}
+    .price-box{background:var(--s3);border-radius:16px;padding:20px;margin:12px;text-align:center;border:2px dashed var(--p)}
+    .price-val{font-size:36px;font-weight:800;color:var(--p);margin:8px 0;letter-spacing:-1.5px}
     #toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--p);color:white;padding:12px 24px;border-radius:12px;z-index:200;opacity:0;transition:opacity.3s;pointer-events:none;font-weight:600}
     #toast.show{opacity:1}
- .hidden{display:none!important}
- .empty{text-align:center;padding:32px 16px;color:var(--t2);font-size:13px}
- .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;display:none;align-items:center;justify-content:center;padding:16px}
- .modal.active{display:flex}
- .modal-content{background:var(--s2);border-radius:16px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto}
- .modal-header{padding:16px;border-bottom:1px solid var(--s3);display:flex;justify-content:space-between;align-items:center}
- .modal-body{padding:16px}
- .modal-footer{padding:16px;border-top:1px solid var(--s3);display:flex;gap:8px}
-    @media print {.no-print{display:none!important}.card{box-shadow:none;border:1px solid #ddd;margin:8px 0}}
+    .empty{text-align:center;padding:32px 16px;color:var(--t2);font-size:13px}
   </style>
 </head>
 <body>
   <div class="app">
     <div class="head">
-  <div class="brand">KALKULATOR HPP PRO</div>
-  <div class="sub">Database Resep + Export PDF</div>
-  <div style="font-size:10px;opacity:0.8;margin-top:6px;letter-spacing:0.5px;">
-    Developed by <b>Karya Bakti Cipta Mandiri</b>
-  </div>
-    </div>
-
-    <div class="tabs no-print">
-      <div class="tab active" onclick="gantiTab('kalkulator', this)">
-        <i data-lucide="calculator" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;"></i> Kalkulator
-      </div>
-      <div class="tab" onclick="gantiTab('database', this)">
-        <i data-lucide="database" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;"></i> Database
+      <div class="brand">KALKULATOR HPP PRO</div>
+      <div class="sub">Hitung HPP + Export PDF</div>
+      <div style="font-size:10px;opacity:0.8;margin-top:6px;letter-spacing:0.5px;">
+        Developed by <b>Karya Bakti Cipta Mandiri</b>
       </div>
     </div>
 
-    <!-- TAB KALKULATOR -->
-    <div class="tab-content active" id="tab-kalkulator">
-      <div class="card">
-        <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
-          <i data-lucide="package" style="width:18px;height:18px;color:var(--p);"></i> Info Produk
+    <div class="card">
+      <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
+        <i data-lucide="package" style="width:18px;height:18px;color:var(--p);"></i> Info Produk
+      </h3>
+      <div class="g2 mb-3">
+        <div>
+          <label>Nama Produk</label>
+          <input id="namaProduk" placeholder="Kopi Susu Gula Aren">
+        </div>
+        <div>
+          <label>Kategori</label>
+          <select id="kategoriProduk">
+            <option value="Minuman">🥤 Minuman</option>
+            <option value="Makanan">🍜 Makanan</option>
+            <option value="Snack">🍪 Snack</option>
+            <option value="Dessert">🍰 Dessert</option>
+            <option value="Lainnya">📦 Lainnya</option>
+          </select>
+        </div>
+      <div class="g2">
+        <div>
+          <label>Hasil Jadi</label>
+          <input id="hasilJadi" type="number" value="1" inputmode="numeric" oninput="hitung()">
+        </div>
+        <div>
+          <label>Satuan</label>
+          <select id="satuanHasil" onchange="hitung()">
+            <option value="porsi">Porsi</option>
+            <option value="pcs">Pcs</option>
+            <option value="cup">Cup</option>
+            <option value="botol">Botol</option>
+            <option value="toples">Toples</option>
+            <option value="box">Box</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 class="font-bold" style="display:flex;align-items:center;gap:8px;">
+          <i data-lucide="beaker" style="width:18px;height:18px;color:var(--p);"></i> Bahan Baku
         </h3>
-        <div class="g2 mb-3">
-          <div>
-            <label>Nama Produk</label>
-            <input id="namaProduk" placeholder="Kopi Susu Gula Aren">
-          </div>
-          <div>
-            <label>Kategori</label>
-            <select id="kategoriProduk">
-              <option value="Minuman">🥤 Minuman</option>
-              <option value="Makanan">🍜 Makanan</option>
-              <option value="Snack">🍪 Snack</option>
-              <option value="Dessert">🍰 Dessert</option>
-              <option value="Lainnya">📦 Lainnya</option>
-            </select>
-          </div>
-        </div>
-        <div class="g2">
-          <div>
-            <label>Hasil Jadi</label>
-            <input id="hasilJadi" type="number" value="1" inputmode="numeric" oninput="hitung()">
-          </div>
-          <div>
-            <label>Satuan</label>
-            <select id="satuanHasil" onchange="hitung()">
-              <option value="porsi">Porsi</option>
-              <option value="pcs">Pcs</option>
-              <option value="cup">Cup</option>
-              <option value="botol">Botol</option>
-              <option value="toples">Toples</option>
-              <option value="box">Box</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <h3 class="font-bold" style="display:flex;align-items:center;gap:8px;">
-            <i data-lucide="beaker" style="width:18px;height:18px;color:var(--p);"></i> Bahan Baku
-          </h3>
-          <button class="btn btn-p btn-s" onclick="tambahBahan()">
-            <i data-lucide="plus" style="width:16px;height:16px;"></i> Tambah
-          </button>
-        </div>
-        <div id="listBahan" class="empty">Belum ada bahan. Klik + Tambah</div>
-        <div class="text-xs mt-3" style="color:var(--t2);line-height:1.5;">
-          💡 <b>Harga Beli</b> = harga 1 kemasan. <b>Isi</b> = berat/volume kemasan. <b>Pakai</b> = yg dipakai per resep
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
-          <i data-lucide="wallet" style="width:18px;height:18px;color:var(--p);"></i> Biaya Operasional
-        </h3>
-        <div class="g2">
-          <div>
-            <label>Gas/Listrik</label>
-            <input id="biayaOps" type="number" value="0" inputmode="numeric" oninput="hitung()">
-          </div>
-          <div>
-            <label>Kemasan</label>
-            <input id="biayaKemasan" type="number" value="0" inputmode="numeric" oninput="hitung()">
-          </div>
-          <div>
-            <label>Tenaga Kerja</label>
-            <input id="biayaTenaga" type="number" value="0" inputmode="numeric" oninput="hitung()">
-          </div>
-          <div>
-            <label>Lain-lain</label>
-            <input id="biayaLain" type="number" value="0" inputmode="numeric" oninput="hitung()">
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
-          <i data-lucide="trending-up" style="width:18px;height:18px;color:var(--p);"></i> Harga Jual
-        </h3>
-        <div class="g2 mb-3">
-          <div>
-            <label>Margin %</label>
-            <input id="marginPersen" type="number" value="50" inputmode="decimal" oninput="hitung()">
-          </div>
-          <div>
-            <label>Markup Rp</label>
-            <input id="markupRp" type="number" value="0" inputmode="numeric" oninput="hitung()">
-          </div>
-        <div class="text-xs" style="color:var(--t2);background:var(--s3);padding:10px;border-radius:8px;">
-          Rumus: <span class="mono">Harga = HPP + (HPP × Margin%) + Markup</span>
-        </div>
-      </div>
-
-      <div class="total-box">
-        <div class="total-lab">HPP Per <span id="labSatuan">Porsi</span></div>
-        <div class="total-val mono" id="totalHPP">Rp 0</div>
-        <div class="stat-row">
-          <div>Modal: <span id="totalModal" class="mono">Rp 0</span></div>
-          <div>•</div>
-          <div>Bahan: <span id="totalBahan" class="mono">Rp 0</span></div>
-        </div>
-      </div>
-
-      <div class="price-box">
-        <div class="total-lab" style="color:var(--t2);">Rekomendasi Harga Jual</div>
-        <div class="price-val mono" id="hargaJual">Rp 0</div>
-        <div class="text-xs" style="color:var(--t2);">
-          Laba: <span id="labaBersih" class="mono font-semibold" style="color:var(--p);">Rp 0</span> per <span id="labSatuan2">porsi</span>
-          <span style="margin:0 8px;">•</span>
-          Profit: <span id="profitPersen" class="mono font-semibold" style="color:var(--p);">0%</span>
-        </div>
-      </div>
-
-      <div style="padding:12px;display:flex;gap:8px;" class="no-print">
-        <button class="btn btn-g" onclick="resetForm()" style="flex:1;">
-          <i data-lucide="rotate-ccw" style="width:18px;height:18px;"></i> Reset
+        <button class="btn btn-p btn-s" onclick="tambahBahan()">
+          <i data-lucide="plus" style="width:16px;height:16px;"></i> Tambah
         </button>
-        <button class="btn btn-o" onclick="cetakPDF()" style="flex:1;">
-          <i data-lucide="file-text" style="width:18px;height:18px;"></i> Cetak PDF
-        </button>
-        <button class="btn btn-p" onclick="simpanKeDatabase()" style="flex:1;">
-          <i data-lucide="save" style="width:18px;height:18px;"></i> Simpan
-        </button>
+      </div>
+      <div id="listBahan" class="empty">Belum ada bahan. Klik + Tambah</div>
+      <div class="text-xs mt-3" style="color:var(--t2);line-height:1.5;">
+        💡 <b>Harga Beli</b> = harga 1 kemasan. <b>Isi</b> = berat/volume kemasan. <b>Pakai</b> = yg dipakai per resep
       </div>
     </div>
 
-    <!-- TAB DATABASE -->
-    <div class="tab-content" id="tab-database">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <h3 class="font-bold" style="display:flex;align-items:center;gap:8px;">
-            <i data-lucide="folder-open" style="width:18px;height:18px;color:var(--p);"></i> Resep Tersimpan
-          </h3>
-          <button class="btn btn-g btn-xs" onclick="exportSemuaResep()">
-            <i data-lucide="download" style="width:14px;height:14px;"></i> Export
-          </button>
+    <div class="card">
+      <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
+        <i data-lucide="wallet" style="width:18px;height:18px;color:var(--p);"></i> Biaya Operasional
+      </h3>
+      <div class="g2">
+        <div>
+          <label>Gas/Listrik</label>
+          <input id="biayaOps" type="number" value="0" inputmode="numeric" oninput="hitung()">
         </div>
-        <input id="searchResep" placeholder="🔍 Cari resep..." oninput="renderDatabase()" style="margin-bottom:12px;">
-        <div id="listDatabase"></div>
+        <div>
+          <label>Kemasan</label>
+          <input id="biayaKemasan" type="number" value="0" inputmode="numeric" oninput="hitung()">
+        </div>
+        <div>
+          <label>Tenaga Kerja</label>
+          <input id="biayaTenaga" type="number" value="0" inputmode="numeric" oninput="hitung()">
+        </div>
+        <div>
+          <label>Lain-lain</label>
+          <input id="biayaLain" type="number" value="0" inputmode="numeric" oninput="hitung()">
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal Konfirmasi Hapus -->
-  <div id="modalHapus" class="modal">
-    <div class="modal-content" style="max-width:320px;">
-      <div class="modal-header">
-        <h3 class="font-bold">Hapus Resep?</h3>
-        <button onclick="tutupModalHapus()" style="background:none;border:none;cursor:pointer;">
-          <i data-lucide="x" style="width:20px;height:20px;"></i>
-        </button>
+    <div class="card">
+      <h3 class="font-bold mb-3" style="display:flex;align-items:center;gap:8px;">
+        <i data-lucide="trending-up" style="width:18px;height:18px;color:var(--p);"></i> Harga Jual
+      </h3>
+      <div class="g2 mb-3">
+        <div>
+          <label>Margin %</label>
+          <input id="marginPersen" type="number" value="50" inputmode="decimal" oninput="hitung()">
+        </div>
+        <div>
+          <label>Markup Rp</label>
+          <input id="markupRp" type="number" value="0" inputmode="numeric" oninput="hitung()">
+        </div>
+      <div class="text-xs" style="color:var(--t2);background:var(--s3);padding:10px;border-radius:8px;">
+        Rumus: <span class="mono">Harga = HPP + (HPP × Margin%) + Markup</span>
       </div>
-      <div class="modal-body">
-        <p class="text-sm" style="color:var(--t2);">Yakin hapus resep <b id="namaResepHapus"></b>? Data tidak bisa dikembalikan.</p>
+    </div>
+
+    <div class="total-box">
+      <div class="total-lab">HPP Per <span id="labSatuan">Porsi</span></div>
+      <div class="total-val mono" id="totalHPP">Rp 0</div>
+      <div class="stat-row">
+        <div>Modal: <span id="totalModal" class="mono">Rp 0</span></div>
+        <div>•</div>
+        <div>Bahan: <span id="totalBahan" class="mono">Rp 0</span></div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-g" onclick="tutupModalHapus()" style="flex:1;">Batal</button>
-        <button class="btn btn-p" onclick="konfirmasiHapus()" style="flex:1;background:#ef4444;">Hapus</button>
+    </div>
+
+    <div class="price-box">
+      <div class="total-lab" style="color:var(--t2);">Rekomendasi Harga Jual</div>
+      <div class="price-val mono" id="hargaJual">Rp 0</div>
+      <div class="text-xs" style="color:var(--t2);">
+        Laba: <span id="labaBersih" class="mono font-semibold" style="color:var(--p);">Rp 0</span> per <span id="labSatuan2">porsi</span>
+        <span style="margin:0 8px;">•</span>
+        Profit: <span id="profitPersen" class="mono font-semibold" style="color:var(--p);">0%</span>
       </div>
+    </div>
+
+    <div style="padding:12px;display:flex;gap:8px;">
+      <button class="btn btn-g" onclick="resetForm()" style="flex:1;">
+        <i data-lucide="rotate-ccw" style="width:18px;height:18px;"></i> Reset
+      </button>
+      <button class="btn btn-p" onclick="cetakPDF()" style="flex:2;">
+        <i data-lucide="file-text" style="width:18px;height:18px;"></i> Export PDF
+      </button>
     </div>
   </div>
 
@@ -256,8 +191,6 @@
     const rp = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(Math.round(n));
     let bahan = [];
     let idCounter = 0;
-    let idHapus = null;
-    let tabAktif = 'kalkulator';
     let dataTerakhir = null;
 
     const konversi = {
@@ -275,16 +208,6 @@
       t.style.background = color;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2000);
-    }
-
-    function gantiTab(tab, el) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      $('tab-' + tab).classList.add('active');
-      tabAktif = tab;
-      if(tab === 'database') renderDatabase();
-      if(window.lucide) lucide.createIcons();
     }
 
     function tambahBahan() {
@@ -368,8 +291,14 @@
 
     function konv(nilai, dari, ke) {
       if(dari === ke) return nilai;
-      if(konversi && konversi[ke]) return nilai * konversi[ke];
-      if(konversi[ke] && konversi[ke]) return nilai / konversi[ke];
+      if(dari === 'kg' && ke === 'gram') return nilai * 1000;
+      if(dari === 'gram' && ke === 'kg') return nilai / 1000;
+      if(dari === 'liter' && ke === 'ml') return nilai * 1000;
+      if(dari === 'ml' && ke === 'liter') return nilai / 1000;
+      if(dari === 'sdm' && (ke === 'gram' || ke === 'ml')) return nilai * 15;
+      if(dari === 'sdt' && (ke === 'gram' || ke === 'ml')) return nilai * 5;
+      if((dari === 'gram' || dari === 'ml') && ke === 'sdm') return nilai / 15;
+      if((dari === 'gram' || dari === 'ml') && ke === 'sdt') return nilai / 5;
       return nilai;
     }
 
@@ -412,7 +341,6 @@
       $('labSatuan').textContent = satuan;
       $('labSatuan2').textContent = satuan;
 
-      // Simpan data terakhir untuk PDF
       dataTerakhir = {
         nama: $('namaProduk').value || 'Tanpa Nama',
         kategori: $('kategoriProduk').value,
@@ -441,209 +369,9 @@
       toast('🔄 Form direset', '#f59e0b');
     }
 
-    function simpanKeDatabase() {
-      const nama = $('namaProduk').value.trim();
-      if(!nama) return toast('Isi nama produk dulu!', '#ef4444');
-      if(bahan.length === 0) return toast('Tambah bahan dulu!', '#ef4444');
-
-      const data = {
-        id: Date.now(),
-        nama: nama,
-        kategori: $('kategoriProduk').value,
-        hasilJadi: parseFloat($('hasilJadi').value) || 1,
-        satuan: $('satuanHasil').value,
-        bahan: [...bahan],
-        biaya: {
-          operasional: parseFloat($('biayaOps').value) || 0,
-          kemasan: parseFloat($('biayaKemasan').value) || 0,
-          tenaga: parseFloat($('biayaTenaga').value) || 0,
-          lain: parseFloat($('biayaLain').value) || 0
-        },
-        pricing: {
-          margin: parseFloat($('marginPersen').value) || 0,
-          markup: parseFloat($('markupRp').value) || 0
-        },
-        hasil: {
-          hpp: $('totalHPP').textContent,
-          hargaJual: $('hargaJual').textContent,
-          laba: $('labaBersih').textContent
-        },
-        tanggal: new Date().toISOString()
-      };
-
-      let db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      const idx = db.findIndex(r => r.nama.toLowerCase() === nama.toLowerCase());
-      if(idx >= 0) {
-        if(confirm('Resep "' + nama + '" sudah ada. Timpa?')) {
-          data.id = db[idx].id;
-          db[idx] = data;
-        } else {
-          return;
-        }
-      } else {
-        db.push(data);
-      }
-
-      localStorage.setItem('hpp_database', JSON.stringify(db));
-      toast('💾 Resep disimpan ke database', '#10b981');
-    }
-
-    function renderDatabase() {
-      const db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      const search = $('searchResep').value.toLowerCase();
-      const filtered = search? db.filter(r => r.nama.toLowerCase().includes(search) || r.kategori.toLowerCase().includes(search)) : db;
-
-      if(filtered.length === 0) {
-        $('listDatabase').innerHTML = '<div class="empty">Belum ada resep tersimpan</div>';
-        return;
-      }
-
-      $('listDatabase').innerHTML = filtered.sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal)).map(r => `
-        <div class="resep-item">
-          <div class="resep-head">
-            <div class="resep-nama">${r.nama}</div>
-            <div class="resep-kat">${r.kategori}</div>
-          </div>
-          <div class="resep-info">
-            <div>HPP: <span class="mono">${r.hasil.hpp}</span></div>
-            <div>•</div>
-            <div>Jual: <span class="mono" style="color:var(--p);font-weight:600;">${r.hasil.hargaJual}</span></div>
-            <div>•</div>
-            <div>${r.hasilJadi} ${r.satuan}</div>
-          </div>
-          <div class="resep-aksi">
-            <button class="btn btn-p btn-xs" onclick="loadResep(${r.id})" style="flex:1;">
-              <i data-lucide="folder-open" style="width:14px;height:14px;"></i> Buka
-            </button>
-            <button class="btn btn-g btn-xs" onclick="cetakPDFResep(${r.id})">
-              <i data-lucide="file-text" style="width:14px;height:14px;"></i>
-            </button>
-            <button class="btn btn-g btn-xs" onclick="duplikatResep(${r.id})">
-              <i data-lucide="copy" style="width:14px;height:14px;"></i>
-            </button>
-            <button class="btn btn-g btn-xs" onclick="hapusResep(${r.id}, '${r.nama.replace(/'/g, "\\'")}')">
-              <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-      if(window.lucide) lucide.createIcons();
-    }
-
-    function loadResep(id) {
-      const db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      const r = db.find(x => x.id === id);
-      if(!r) return;
-
-      $('namaProduk').value = r.nama;
-      $('kategoriProduk').value = r.kategori;
-      $('hasilJadi').value = r.hasilJadi;
-      $('satuanHasil').value = r.satuan;
-      bahan = [...r.bahan];
-      idCounter = Math.max(...bahan.map(b => b.id)) + 1;
-      $('biayaOps').value = r.biaya.operasional;
-      $('biayaKemasan').value = r.biaya.kemasan;
-      $('biayaTenaga').value = r.biaya.tenaga;
-      $('biayaLain').value = r.biaya.lain;
-      $('marginPersen').value = r.pricing.margin;
-      $('markupRp').value = r.pricing.markup;
-
-      renderBahan();
-      hitung();
-      gantiTab('kalkulator', document.querySelectorAll('.tab')[0]);
-      toast('📂 Resep dimuat: ' + r.nama, '#10b981');
-    }
-
-    function duplikatResep(id) {
-      const db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      const r = db.find(x => x.id === id);
-      if(!r) return;
-      const copy = {...r, id: Date.now(), nama: r.nama + ' (Copy)'};
-      db.push(copy);
-      localStorage.setItem('hpp_database', JSON.stringify(db));
-      renderDatabase();
-      toast('📋 Resep diduplikat', '#10b981');
-    }
-
-    function hapusResep(id, nama) {
-      idHapus = id;
-      $('namaResepHapus').textContent = nama;
-      $('modalHapus').classList.add('active');
-    }
-
-    function tutupModalHapus() {
-      $('modalHapus').classList.remove('active');
-      idHapus = null;
-    }
-
-    function konfirmasiHapus() {
-      if(!idHapus) return;
-      let db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      db = db.filter(r => r.id!== idHapus);
-      localStorage.setItem('hpp_database', JSON.stringify(db));
-      tutupModalHapus();
-      renderDatabase();
-      toast('🗑️ Resep dihapus', '#f59e0b');
-    }
-
-    function exportSemuaResep() {
-      const db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      if(db.length === 0) return toast('Database kosong!', '#f59e0b');
-      const blob = new Blob([JSON.stringify(db, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `HPP_Database_${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      toast('📥 Database diexport', '#10b981');
-    }
-
     function cetakPDF() {
       if(!dataTerakhir ||!dataTerakhir.bahan.length) return toast('Isi data dulu!', '#ef4444');
       generatePDF(dataTerakhir);
-    }
-
-    function cetakPDFResep(id) {
-      const db = JSON.parse(localStorage.getItem('hpp_database') || '[]');
-      const r = db.find(x => x.id === id);
-      if(!r) return;
-
-      const d = {
-        nama: r.nama,
-        kategori: r.kategori,
-        hasilJadi: r.hasilJadi,
-        satuan: r.satuan,
-        bahan: r.bahan,
-        biaya: r.biaya,
-        pricing: r.pricing,
-        hasil: {
-          hpp: parseFloat(r.hasil.hpp.replace(/[^\d]/g,'')),
-          totalModal: 0,
-          totalBahan: 0,
-          jual: parseFloat(r.hasil.hargaJual.replace(/[^\d]/g,'')),
-          laba: parseFloat(r.hasil.laba.replace(/[^\d]/g,'')),
-          profitPersen: 0
-        }
-      };
-
-      // Hitung ulang detail
-            let totalBahan = 0;
-      r.bahan.forEach(b => {
-        if(b.beli > 0 && b.isi > 0 && b.pakai > 0) {
-          const hargaSatuan = b.beli / b.isi;
-          let pakaiKonv = b.pakai;
-          if(b.satBeli!== b.satPakai) {
-            pakaiKonv = konv(b.pakai, b.satPakai, b.satBeli);
-          }
-          totalBahan += hargaSatuan * pakaiKonv;
-        }
-      });
-      d.hasil.totalBahan = totalBahan;
-      d.hasil.totalModal = totalBahan + r.biaya.operasional + r.biaya.kemasan + r.biaya.tenaga + r.biaya.lain;
-      d.hasil.hpp = d.hasil.totalModal / r.hasilJadi;
-      d.hasil.profitPersen = d.hasil.hpp > 0? (d.hasil.laba / d.hasil.hpp * 100) : 0;
-
-      generatePDF(d);
     }
 
     function generatePDF(d) {
@@ -651,7 +379,6 @@
       const doc = new jsPDF();
       const tgl = new Date().toLocaleDateString('id-ID', {day:'2-digit',month:'long',year:'numeric'});
       
-      // Header
       doc.setFontSize(18);
       doc.setFont('helvetica', 'bold');
       doc.text('KALKULASI HPP', 105, 20, {align:'center'});
@@ -659,7 +386,6 @@
       doc.setFont('helvetica', 'normal');
       doc.text(tgl, 105, 26, {align:'center'});
       
-      // Info Produk
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
       doc.text('INFO PRODUK', 14, 38);
@@ -669,7 +395,6 @@
       doc.text(`Kategori: ${d.kategori}`, 14, 51);
       doc.text(`Hasil Jadi: ${d.hasilJadi} ${d.satuan}`, 14, 57);
 
-      // Tabel Bahan
       const bahanData = d.bahan.map((b, i) => {
         const hargaSatuan = b.beli / b.isi;
         let pakaiKonv = b.pakai;
@@ -703,22 +428,19 @@
       });
 
       let y = doc.lastAutoTable.finalY + 8;
-
-      // Biaya Operasional
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('BIAYA OPERASIONAL', 14, y);
       y += 6;
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Gas/Listrik:`, 14, y); doc.text(rp(d.biaya.operasional), 196, y, {align:'right'}); y += 6;
+      doc.text(`Gas/Listrik:`, 14, y); doc.text(rp(d.biaya.ops), 196, y, {align:'right'}); y += 6;
       doc.text(`Kemasan:`, 14, y); doc.text(rp(d.biaya.kemasan), 196, y, {align:'right'}); y += 6;
       doc.text(`Tenaga Kerja:`, 14, y); doc.text(rp(d.biaya.tenaga), 196, y, {align:'right'}); y += 6;
       doc.text(`Lain-lain:`, 14, y); doc.text(rp(d.biaya.lain), 196, y, {align:'right'}); y += 6;
       doc.setFont('helvetica', 'bold');
       doc.text(`Total Bahan:`, 14, y); doc.text(rp(d.hasil.totalBahan), 196, y, {align:'right'}); y += 8;
 
-      // HPP
       doc.setDrawColor(103, 80, 164);
       doc.setLineWidth(0.5);
       doc.line(14, y-2, 196, y-2);
@@ -728,7 +450,6 @@
       doc.text(rp(d.hasil.hpp), 196, y+4, {align:'right'}); 
       y += 12;
 
-      // Harga Jual
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('HARGA JUAL', 14, y);
@@ -750,14 +471,22 @@
       doc.setFont('helvetica', 'normal');
       doc.text(`Laba Bersih: ${rp(d.hasil.laba)} per ${d.satuan} (${d.hasil.profitPersen.toFixed(1)}%)`, 14, y);
 
-      // Footer
       doc.setFontSize(8);
-doc.setTextColor(100, 100, 100);
-doc.text('Generated by Kalkulator HPP Pro | Developed by Karya Bakti Cipta Mandiri', 105, 285, {align:'center'});
+      doc.setTextColor(100, 100, 100);
+      doc.text('Generated by Kalkulator HPP Pro | Developed by Karya Bakti Cipta Mandiri', 105, 285, {align:'center'});
 
-      // Save
-      doc.save(`HPP_${d.nama.replace(/\s+/g, '_')}.pdf`);
-      toast('📄 PDF berhasil dibuat', '#10b981');
+      try {
+        doc.save(`HPP_${d.nama.replace(/\s+/g, '_')}.pdf`);
+        toast('📄 PDF berhasil dibuat. Cek folder Download', '#10b981');
+      } catch(e) {
+        toast('Izinkan akses Storage di Settings > Apps > HPP Pro > Permissions', '#ef4444');
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
     }
 
     window.addEventListener('load', () => {
