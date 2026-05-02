@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>HPP PRO - Karya Bakti Cipta Mandiri</title>
+<meta name="theme-color" content="#2563eb">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--p:#2563eb;--p2:#1d4ed8;--bg:#f8fafc;--card:#fff;--txt:#0f172a;--muted:#64748b;--line:#e2e8f0;--green:#16a34a;--red:#dc2626;--orange:#ea580c}
+*{box-sizing:border-box;font-family:'Inter',system-ui,sans-serif;margin:0;transition:all.2s ease}
+body{background:var(--bg);color:var(--txt);padding-bottom:80px;font-size:14px}
+body.dark{--bg:#0f172a;--card:#1e293b;--txt:#f1f5f9;--muted:#94a3b8;--line:#334155}
+.container{max-width:600px;margin:0 auto;padding:0 10px}
+header{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:12px 0;position:sticky;top:0;z-index:50;box-shadow:0 4px 20px rgba(37,99,235,.25)}
+.header-content{display:flex;justify-content:space-between;align-items:center}
+.logo h1{font-size:17px;font-weight:900;letter-spacing:-.5px;margin-bottom:2px}
+.logo span{background:rgba(255,255,255,.2);padding:2px 6px;border-radius:5px;font-size:8px;font-weight:700;display:inline-block}
+.header-btns{display:flex;gap:5px}
+.icon-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:0;color:#fff;padding:6px;border-radius:8px;font-size:14px;width:34px;height:34px}
+.icon-btn:active{transform:scale(.9)}
+.tabs{display:flex;gap:4px;padding:8px 0;overflow:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 12px;border-radius:8px;background:var(--card);font-size:11px;font-weight:700;border:1px solid var(--line);white-space:nowrap;color:var(--muted);flex-shrink:0}
+.tab.active{background:var(--p);color:#fff;border-color:var(--p);box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.tab-content{display:none;animation:fadeIn.3s}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--line);margin-bottom:12px}
+.card h3{font-size:14px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.form-group{margin-bottom:10px}
+.form-group label{display:block;font-size:10px;font-weight:600;margin-bottom:4px;color:var(--muted)}
+.form-group input,.form-group select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)}
+.form-group input:focus,.form-group select:focus{outline:2px solid var(--p);border-color:transparent}
+.input-group{display:flex;gap:5px}
+.input-group input{flex:1}
+.btn{padding:10px 14px;border:0;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;width:100%}
+.btn-primary{background:var(--p);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.25)}
+.btn-primary:active{transform:scale(.97)}
+.btn-success{background:var(--green);color:#fff}
+.btn-danger{background:var(--red);color:#fff}
+.btn-ghost{background:var(--bg);color:var(--txt);border:1px solid var(--line)}
+.btn-sm{padding:6px 9px;font-size:10px;width:auto}
+.badge{padding:2px 6px;border-radius:5px;font-size:9px;font-weight:700;display:inline-block}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-orange{background:#ffedd5;color:#9a3412}
+.stat-card{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:14px;border-radius:10px;margin-bottom:8px}
+.stat-label{font-size:10px;opacity:.9;margin-bottom:2px}
+.stat-value{font-size:24px;font-weight:900;letter-spacing:-.5px}
+.stat-change{font-size:9px;margin-top:4px}
+.toast{position:fixed;top:65px;left:50%;transform:translateX(-50%);background:var(--txt);color:var(--bg);padding:8px 14px;border-radius:9px;font-size:11px;font-weight:600;z-index:70;display:none;box-shadow:0 8px 20px rgba(0,0,0,.2);max-width:90%}
+.toast.show{display:block;animation:toastIn.3s}
+@keyframes toastIn{from{transform:translateX(-50%) translateY(-20px);opacity:0}to{transform:translateX(-50%);opacity:1}}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.kpi-item{background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--line)}
+.kpi-label{font-size:9px;color:var(--muted);margin-bottom:2px}
+.kpi-value{font-size:15px;font-weight:800}
+.profit-indicator{width:100%;height:4px;background:var(--line);border-radius:10px;overflow:hidden;margin-top:5px}
+.profit-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--orange),var(--green));transition:width.5s}
+.bahan-item{margin-bottom:10px;padding:10px;background:var(--bg);border-radius:10px;border:1px solid var(--line)}
+.bahan-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.bahan-title{font-weight:700;font-size:11px;color:var(--p)}
+.bahan-section{margin-bottom:6px}
+.bahan-section-label{font-size:8px;font-weight:700;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.bahan-grid{display:grid;grid-template-columns:1fr 40px;gap:4px}
+.bahan-grid-full{display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:4px}
+.bahan-input-wrap label{font-size:8px;margin-bottom:2px;color:var(--muted);font-weight:600;display:block}
+.bahan-input-wrap input,.bahan-input-wrap select{padding:7px!important;font-size:11px!important;border-radius:6px!important}
+.bahan-input-qty{padding:6px 3px!important;font-size:11px!important;text-align:center}
+.bahan-input-satuan{padding:6px 1px!important;font-size:10px!important;text-align:center;width:40px!important;background:var(--bg)}
+.bahan-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
+.bahan-subtotal{font-size:9px;font-weight:700;color:var(--p)}
+.bahan-subtotal span{font-size:11px}
+.bahan-divider{height:1px;background:var(--line);margin:6px 0}
+.btn-hapus-mini{background:var(--red);color:#fff;border:0;padding:4px 7px;border-radius:5px;font-size:9px;font-weight:700}
+.btn-hapus-mini:active{transform:scale(.95)}
+.empty{text-align:center;padding:24px 20px;color:var(--muted)}
+.empty-icon{font-size:32px;margin-bottom:6px;opacity:.5}
+.footer-credit{text-align:center;padding:12px;color:var(--muted);font-size:9px;border-top:1px solid var(--line);margin-top:20px}
+.footer-credit b{color:var(--p)}
+.chart-wrap{position:relative;height:160px;margin-top:8px}
+.produk-item{background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--line);margin-bottom:6px}
+.produk-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
+.produk-nama{font-weight:700;font-size:13px}
+.produk-kat{font-size:9px;color:var(--muted);background:var(--line);padding:2px 5px;border-radius:4px}
+.produk-body{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px}
+.produk-label{color:var(--muted)}
+.produk-value{font-weight:700;text-align:right}
+.produk-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <h1>HPP PRO</h1>
+        <span>Karya Bakti Cipta Mandiri</span>
+      </div>
+      <div class="header-btns">
+        <button class="icon-btn" onclick="toggleDark()">🌙</button>
+        <button class="icon-btn" onclick="exportPDF()">📄</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('kalkulator',this)">🧮 Hitung HPP</button>
+    <button class="tab" onclick="switchTab('riwayat',this)">📋 Riwayat</button>
+    <button class="tab" onclick="switchTab('dashboard',this)">📊 Analitik</button>
+  </div>
+
+  <div id="kalkulator" class="tab-content active">
+    <div class="card">
+      <h3>📦 Data Produk</h3>
+      <div class="form-group">
+        <label>Nama Produk / Menu *</label>
+        <input type="text" id="prodNama" placeholder="Contoh: Nasi Goreng Spesial">
+      </div>
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="prodKategori">
+          <option>Makanan</option><option>Minuman</option><option>Fashion</option>
+          <option>Elektronik</option><option>Jasa</option><option>Lainnya</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Satuan Hasil Jadi</label>
+        <input type="text" id="prodSatuan" placeholder="Porsi, Pcs" value="Porsi">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧱 Bahan Baku yang Digunakan</h3>
+      <div id="listBahan"></div>
+      <button class="btn btn-ghost" onclick="tambahBahan()">+ Tambah Bahan</button>
+    </div>
+
+    <div class="card">
+      <h3>💰 Biaya Tambahan</h3>
+      <div class="form-group">
+        <label>Biaya Operasional / Tenaga Kerja</label>
+        <div class="input-group">
+          <input type="number" id="biayaOpr" placeholder="5000" oninput="hitungTotal()">
+          <select id="biayaOprType" onchange="hitungTotal()" style="width:60px">
+            <option value="rp">Rp</option>
+            <option value="%">%</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Biaya Kemasan</label>
+        <input type="number" id="biayaKemasan" placeholder="2000" oninput="hitungTotal()">
+      </div>
+      <div class="form-group">
+        <label>Biaya Lain-lain</label>
+        <input type="number" id="biayaLain" placeholder="1000" oninput="hitungTotal()">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📈 Target Keuntungan</h3>
+      <div class="form-group">
+        <label>Margin Keuntungan (%) *</label>
+        <input type="number" id="targetMargin" placeholder="30" value="30" oninput="hitungTotal()">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>💡 Hasil Perhitungan HPP</h3>
+      <div class="stat-card">
+        <div class="stat-label">Harga Jual Rekomendasi</div>
+        <div class="stat-value" id="hargaJual">Rp 0</div>
+        <div class="stat-change"><span id="labaRupiah">Laba: Rp 0</span></div>
+      </div>
+
+      <div class="kpi" style="margin-top:12px">
+        <div class="kpi-item">
+          <div class="kpi-label">Modal Bahan</div>
+          <div class="kpi-value" id="totalBahanPakai">Rp 0</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">Total HPP</div>
+          <div class="kpi-value" id="totalHPP">Rp 0</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">Margin</div>
+          <div class="kpi-value" id="persenMargin">0%</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">BEP Unit</div>
+          <div class="kpi-value" id="bepUnit">0</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Breakdown Biaya</label>
+        <div id="breakdown" style="font-size:11px;line-height:1.7;background:var(--bg);padding:9px;border-radius:8px"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Profitabilitas</label>
+        <div class="profit-indicator"><div class="profit-bar" id="profitBar" style="width:0%"></div></div>
+        <div style="font-size:9px;margin-top:3px;color:var(--muted);display:flex;justify-content:space-between">
+          <span>Rendah</span><span id="profitText">0%</span><span>Tinggi</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="simpanProduk()">💾 Simpan ke Riwayat</button>
+    </div>
+  </div>
+
+  <div id="riwayat" class="tab-content">
+    <div class="card">
+      <h3>📋 Riwayat Produk</h3>
+      <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="exportPDF()">📄 PDF</button>
+        <button class="btn btn-success btn-sm" onclick="exportExcel()">📊 Excel</button>
+        <button class="btn btn-ghost btn-sm" onclick="hapusSemuaRiwayat()">🗑️ Hapus</button>
+      </div>
+      <div id="tabelRiwayat"></div>
+    </div>
+  </div>
+
+  <div id="dashboard" class="tab-content">
+    <div class="kpi">
+      <div class="kpi-item"><div class="kpi-label">Total Produk</div><div class="kpi-value" id="dashTotalProduk">0</div></div>
+      <div class="kpi-item"><div class="kpi-label">Rata-rata HPP</div><div class="kpi-value" id="dashAvgHPP">Rp 0</div></div>
+      <div class="kpi-item"><div class="kpi-label">Rata-rata Margin</div><div class="kpi-value" id="dashAvgMargin">0%</div></div>
+      <div class="kpi-item"><div class="kpi-label">Potensi Laba</div><div class="kpi-value" id="dashTotalLaba" style="color:var(--green)">Rp 0</div></div>
+    </div>
+
+    <div class="card">
+      <h3>📊 Grafik Margin</h3>
+      <div class="chart-wrap"><canvas id="chartMargin"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h3>💰 Top 5 Profit</h3>
+      <div id="topProduk"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-credit">Dikembangkan oleh <b>Karya Bakti Cipta Mandiri</b> © 2026</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let DB = JSON.parse(localStorage.getItem('hppProDB')||'{"produk":[]}');
+let bahanCounter = 0;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('darkMode')==='true')document.body.classList.add('dark');
+  tambahBahan();
+  renderAll();
+  initCharts();
+});
+
+window.toggleDark=()=>{
+  document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode',document.body.classList.contains('dark'));
+  initCharts();
+}
+
+window.switchTab=(tab,el)=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(tab).classList.add('active');
+  if(tab==='dashboard')setTimeout(initCharts,100);
+  if(tab==='riwayat')renderRiwayat();
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+const Rp=n=>'Rp '+Number(Math.round(n)).toLocaleString('id-ID');
+
+window.tambahBahan=()=>{
+  bahanCounter++;
+  const div=document.createElement('div');
+  div.className='bahan-item';
+  div.id='bahan-'+bahanCounter;
+  div.innerHTML=`
+    <div class="bahan-header">
+      <div class="bahan-title">🧱 Bahan #${bahanCounter}</div>
+      <button class="btn-hapus-mini" onclick="hapusBahan(${bahanCounter})">✕</button>
+    </div>
+
+    <div class="bahan-section">
+      <div class="bahan-grid-full">
+        <div class="bahan-input-wrap">
+          <label>Nama Bahan *</label>
+          <input type="text" class="bahan-nama" placeholder="Tepung Terigu" oninput="hitungTotal()">
+        </div>
+      </div>
+    </div>
+
+    <div class="bahan-section">
+      <div class="bahan-section-label">📦 Saat Beli</div>
+      <div class="bahan-grid">
+        <div class="bahan-input-wrap">
+          <label>Qty Beli</label>
+          <input type="number" class="bahan-qty-beli bahan-input-qty" placeholder="1000" value="1000" step="1" maxlength="4" oninput="hitungTotal()">
+        </div>
+        <div class="bahan-input-wrap">
+          <label>Satuan</label>
+          <select class="bahan-satuan-beli bahan-input-satuan" onchange="hitungTotal()">
+            <option value="gr">gr</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+      </div>
+      <div class="bahan-grid-full">
+        <div class="bahan-input-wrap">
+          <label>Total Harga Beli</label>
+          <input type="number" class="bahan-harga-beli" placeholder="15000" oninput="hitungTotal()">
+        </div>
+      </div>
+    </div>
+
+    <div class="bahan-divider"></div>
+
+    <div class="bahan-section">
+      <div class="bahan-section-label">🥄 Yang Dipakai</div>
+      <div class="bahan-grid">
+        <div class="bahan-input-wrap">
+          <label>Qty Pakai</label>
+          <input type="number" class="bahan-qty-pakai bahan-input-qty" placeholder="100" value="0" step="1" maxlength="4" oninput="hitungTotal()">
+        </div>
+        <div class="bahan-input-wrap">
+          <label>Satuan</label>
+          <select class="bahan-satuan-pakai bahan-input-satuan" onchange="hitungTotal()">
+            <option value="gr">gr</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+      </div>
+      <div class="bahan-grid-full">
+        <div class="bahan-input-wrap">
+          <label>Catatan</label>
+          <input type="text" class="bahan-catatan" placeholder="Untuk 1 porsi" maxlength="15" oninput="hitungTotal()">
+        </div>
+      </div>
+    </div>
+
+    <div class="bahan-footer">
+      <div class="bahan-subtotal">Modal: <span class="subtotal-val">Rp 0</span></div>
+      <div style="font-size:9px;color:var(--muted)">/<span class="harga-satuan">Rp 0</span></div>
+    </div>
+  `;
+  document.getElementById('listBahan').appendChild(div);
+  hitungTotal();
+}
+
+window.hapusBahan=id=>{
+  document.getElementById('bahan-'+id).remove();
+  hitungTotal();
+}
+
+window.hitungTotal=()=>{
+  let totalBahanBeli=0;
+  let totalBahanPakai=0;
+  document.querySelectorAll('.bahan-item').forEach(item=>{
+    const qtyBeli=parseFloat(item.querySelector('.bahan-qty-beli').value)||0;
+    const hargaBeli=parseFloat(item.querySelector('.bahan-harga-beli').value)||0;
+    const qtyPakai=parseFloat(item.querySelector('.bahan-qty-pakai').value)||0;
+
+    const subtotalBeli=hargaBeli;
+    const hargaPerSatuan=qtyBeli>0?hargaBeli/qtyBeli:0;
+    const subtotalPakai=qtyPakai*hargaPerSatuan;
+
+    totalBahanBeli+=subtotalBeli;
+    totalBahanPakai+=subtotalPakai;
+
+    item.querySelector('.subtotal-val').textContent=Rp(subtotalPakai);
+    item.querySelector('.harga-satuan').textContent=Rp(hargaPerSatuan);
+  });
+
+  const biayaOpr=parseFloat(document.getElementById('biayaOpr').value)||0;
+  const oprType=document.getElementById('biayaOprType').value;
+  const biayaKemasan=parseFloat(document.getElementById('biayaKemasan').value)||0;
+  const biayaLain=parseFloat(document.getElementById('biayaLain').value)||0;
+  const margin=parseFloat(document.getElementById('targetMargin').value)||0;
+
+  const totalBiayaOpr = oprType==='%'? totalBahanPakai*biayaOpr/100 : biayaOpr;
+  const totalHPP = totalBahanPakai + totalBiayaOpr + biayaKemasan + biayaLain;
+  const hargaJual = totalHPP / (1 - margin/100);
+  const laba = hargaJual - totalHPP;
+  const persenLaba = totalHPP>0? (laba/totalHPP)*100 : 0;
+
+  document.getElementById('totalBahanPakai').textContent=Rp(totalBahanPakai);
+  document.getElementById('totalHPP').textContent=Rp(totalHPP);
+  document.getElementById('hargaJual').textContent=Rp(hargaJual);
+  document.getElementById('labaRupiah').textContent=`Laba: ${Rp(laba)} (${persenLaba.toFixed(1)}%)`;
+  document.getElementById('persenMargin').textContent=margin+'%';
+  document.getElementById('bepUnit').textContent=laba>0?Math.ceil(totalHPP/laba):'∞';
+
+  document.getElementById('breakdown').innerHTML=`
+    Modal Bahan <b>Dipakai</b>: <b>${Rp(totalBahanPakai)}</b><br>
+    <span style="font-size:10px;color:var(--muted)">(Total Beli: ${Rp(totalBahanBeli)})</span><br>
+    Biaya Opr: ${Rp(totalBiayaOpr)}<br>
+    Kemasan: ${Rp(biayaKemasan)}<br>
+    Lain-lain: ${Rp(biayaLain)}<br>
+    <b style="color:var(--p)">HPP: ${Rp(totalHPP)}</b><br>
+    Margin ${margin}%: ${Rp(laba)}<br>
+    <b style="color:var(--green)">Harga Jual: ${Rp(hargaJual)}</b>
+  `;
+
+  const profitPercent = Math.min(Math.max(persenLaba,0),100);
+  document.getElementById('profitBar').style.width=profitPercent+'%';
+  let profitText='Rendah';
+  if(persenLaba>40)profitText='Sangat Bagus';
+  else if(persenLaba>25)profitText='Bagus';
+  else if(persenLaba>15)profitText='Cukup';
+  document.getElementById('profitText').textContent=profitText+` (${persenLaba.toFixed(1)}%)`;
+}
+
+window.simpanProduk=()=>{
+  const nama=document.getElementById('prodNama').value;
+  if(!nama)return toast('Isi nama produk dulu');
+
+  const bahanList=[];
+  let totalBahanBeli=0,totalBahanPakai=0;
+  document.querySelectorAll('.bahan-item').forEach(item=>{
+    const nama=item.querySelector('.bahan-nama').value;
+    const qtyBeli=parseFloat(item.querySelector('.bahan-qty-beli').value)||0;
+    const satuanBeli=item.querySelector('.bahan-satuan-beli').value;
+    const hargaBeli=parseFloat(item.querySelector('.bahan-harga-beli').value)||0;
+    const qtyPakai=parseFloat(item.querySelector('.bahan-qty-pakai').value)||0;
+    const satuanPakai=item.querySelector('.bahan-satuan-pakai').value;
+    const catatan=item.querySelector('.bahan-catatan').value;
+
+    if(nama&&qtyBeli&&hargaBeli){
+      const subtotalBeli=hargaBeli;
+      const hargaPerSatuan=qtyBeli>0?hargaBeli/qtyBeli:0;
+      const subtotalPakai=qtyPakai*hargaPerSatuan;
+      totalBahanBeli+=subtotalBeli;
+      totalBahanPakai+=subtotalPakai;
+      bahanList.push({nama,qtyBeli,satuanBeli,hargaBeli,qtyPakai,satuanPakai,catatan,subtotalBeli,subtotalPakai});
+    }
+  });
+
+  if(bahanList.length===0)return toast('Tambah minimal 1 bahan');
+
+  const biayaOpr=parseFloat(document.getElementById('biayaOpr').value)||0;
+  const oprType=document.getElementById('biayaOprType').value;
+  const totalBiayaOpr = oprType==='%'? totalBahanPakai*biayaOpr/100 : biayaOpr;
+  const biayaKemasan=parseFloat(document.getElementById('biayaKemasan').value)||0;
+  const biayaLain=parseFloat(document.getElementById('biayaLain').value)||0;
+  const margin=parseFloat(document.getElementById('targetMargin').value)||0;
+  const totalHPP = totalBahanPakai + totalBiayaOpr + biayaKemasan + biayaLain;
+  const hargaJual = Math.round(totalHPP / (1 - margin/100));
+
+  DB.produk.push({
+    id:Date.now(),
+    nama,
+    kategori:document.getElementById('prodKategori').value,
+    satuan:document.getElementById('prodSatuan').value||'Porsi',
+    bahan:bahanList,
+    totalBahanBeli,
+    totalBahanPakai,
+    biayaOpr:totalBiayaOpr,
+    biayaKemasan,
+    biayaLain,
+    hpp:totalHPP,
+    hargaJual,
+    margin,
+    laba:hargaJual-totalHPP,
+    tgl:Date.now()
+  });
+
+  saveDB();renderAll();toast('Produk berhasil disimpan');
+  document.getElementById('prodNama').value='';
+  document.getElementById('listBahan').innerHTML='';
+  bahanCounter=0;
+  tambahBahan();
+  hitungTotal();
+}
+
+function saveDB(){
+  localStorage.setItem('hppProDB',JSON.stringify(DB));
+}
+
+function renderAll(){
+  renderRiwayat();
+  renderDashboard();
+}
+
+function renderRiwayat(){
+  document.getElementById('tabelRiwayat').innerHTML=DB.produk.length?DB.produk.map(p=>{
+    const marginClass=p.margin>30?'badge-green':p.margin>15?'badge-blue':'badge-orange';
+    return `
+    <div class="produk-item">
+      <div class="produk-header">
+        <div>
+          <div class="produk-nama">${p.nama}</div>
+          <span class="produk-kat">${p.kategori} • ${p.satuan}</span>
+        </div>
+        <span class="badge ${marginClass}">${p.margin}%</span>
+      </div>
+      <div class="produk-body">
+        <div><span class="produk-label">Bahan Beli:</span></div>
+        <div class="produk-value">${Rp(p.totalBahanBeli)}</div>
+        <div><span class="produk-label">Bahan Pakai:</span></div>
+        <div class="produk-value"><b>${Rp(p.totalBahanPakai)}</b></div>
+        <div><span class="produk-label">HPP:</span></div>
+        <div class="produk-value"><b>${Rp(p.hpp)}</b></div>
+        <div><span class="produk-label">Harga Jual:</span></div>
+        <div class="produk-value"><b style="color:var(--green)">${Rp(p.hargaJual)}</b></div>
+        <div><span class="produk-label">Laba:</span></div>
+        <div class="produk-value"><b>${Rp(p.laba)}</b></div>
+      </div>
+      <div class="produk-footer">
+        <button class="btn btn-ghost btn-sm" onclick="editProduk(${p.id})">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusProduk(${p.id})">🗑️ Hapus</button>
+      </div>
+    </div>`
+  }).join(''):'<div class="empty"><div class="empty-icon">📦</div>Belum ada produk<br><span style="font-size:11px">Mulai hitung di tab Kalkulator</span></div>';
+}
+
+function renderDashboard(){
+  const totalProduk=DB.produk.length;
+  const totalHPP=DB.produk.reduce((a,b)=>a+b.hpp,0);
+  const avgHPP=totalProduk?totalHPP/totalProduk:0;
+  const avgMargin=totalProduk?DB.produk.reduce((a,b)=>a+b.margin,0)/totalProduk:0;
+  const totalLaba=DB.produk.reduce((a,b)=>a+b.laba,0);
+
+  document.getElementById('dashTotalProduk').textContent=totalProduk;
+  document.getElementById('dashAvgHPP').textContent=Rp(avgHPP);
+  document.getElementById('dashAvgMargin').textContent=avgMargin.toFixed(1)+'%';
+  document.getElementById('dashTotalLaba').textContent=Rp(totalLaba);
+
+  const top=DB.produk.sort((a,b)=>b.laba-a.laba).slice(0,5);
+  document.getElementById('topProduk').innerHTML=top.length?top.map(p=>`
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)">
+      <div><b style="font-size:12px">${p.nama}</b><br><span style="font-size:10px;color:var(--muted)">Laba: ${Rp(p.laba)}</span></div>
+      <div style="text-align:right"><span class="badge badge-green">${p.margin}%</span></div>
+    </div>
+  `).join(''):'<div class="empty"><div class="empty-icon">📦</div>Belum ada produk</div>';
+}
+
+window.editProduk=id=>{
+  const p=DB.produk.find(x=>x.id===id);
+  if(!p)return;
+  document.querySelectorAll('.tab')[0].click();
+  document.getElementById('prodNama').value=p.nama;
+  document.getElementById('prodKategori').value=p.kategori;
+  document.getElementById('prodSatuan').value=p.satuan;
+  document.getElementById('listBahan').innerHTML='';
+  bahanCounter=0;
+  p.bahan.forEach(b=>{
+    tambahBahan();
+    const last=document.querySelector('#listBahan.bahan-item:last-child');
+    last.querySelector('.bahan-nama').value=b.nama;
+    last.querySelector('.bahan-qty-beli').value=b.qtyBeli;
+    last.querySelector('.bahan-satuan-beli').value=b.satuanBeli||'gr';
+    last.querySelector('.bahan-harga-beli').value=b.hargaBeli;
+    last.querySelector('.bahan-qty-pakai').value=b.qtyPakai;
+    last.querySelector('.bahan-satuan-pakai').value=b.satuanPakai||'gr';
+    last.querySelector('.bahan-catatan').value=b.catatan||'';
+  });
+  document.getElementById('biayaKemasan').value=p.biayaKemasan;
+  document.getElementById('biayaLain').value=p.biayaLain;
+  document.getElementById('targetMargin').value=p.margin;
+  hitungTotal();
+  toast('Data dimuat untuk diedit');
+  DB.produk=DB.produk.filter(x=>x.id!==id);
+  saveDB();
+}
+
+window.hapusProduk=id=>{
+  if(confirm('Hapus produk ini?')){
+    DB.produk=DB.produk.filter(p=>p.id!==id);
+    saveDB();renderAll();toast('Produk dihapus');
+  }
+}
+
+window.hapusSemuaRiwayat=()=>{
+  if(confirm('Hapus semua riwayat? Tidak bisa dikembalikan!')){
+    DB.produk=[];
+    saveDB();renderAll();toast('Semua riwayat dihapus');
+  }
+}
+
+let chartMargin;
+function initCharts(){
+  const ctx1=document.getElementById('chartMargin');
+  if(chartMargin)chartMargin.destroy();
+  const dataMargin=DB.produk.slice(0,10).map(p=>({
+    x:p.nama.substring(0,10),
+    y:p.margin
+  }));
+  chartMargin=new Chart(ctx1,{
+    type:'bar',
+    data:{labels:dataMargin.map(d=>d.x),datasets:[{
+      label:'Margin %',
+      data:dataMargin.map(d=>d.y),
+      backgroundColor:'#2563eb',
+      borderRadius:4
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{size:8}}},x:{ticks:{font:{size:7},maxRotation:45}}}}
+  });
+}
+
+window.exportPDF=()=>{
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  doc.setFontSize(15);
+  doc.text('Laporan HPP PRO',14,16);
+  doc.setFontSize(8);
+  doc.text('Karya Bakti Cipta Mandiri',14,21);
+  doc.setFontSize(9);
+  doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`,14,26);
+
+  let y=36;
+  doc.setFontSize(10);
+  doc.text('Daftar Produk:',14,y);
+  y+=5;
+  DB.produk.forEach((p,i)=>{
+    if(y>278){doc.addPage();y=16}
+    doc.setFontSize(8);
+    doc.text(`${i+1}. ${p.nama} (${p.kategori} - ${p.satuan})`,14,y);y+=3.5;
+    doc.text(` Beli: ${Rp(p.totalBahanBeli)} | Pakai: ${Rp(p.totalBahanPakai)} | HPP: ${Rp(p.hpp)}`,14,y);y+=3.5;
+    doc.text(` Jual: ${Rp(p.hargaJual)} | Margin: ${p.margin}% | Laba: ${Rp(p.laba)}`,14,y);y+=5;
+  });
+
+  if(DB.produk.length>0){
+    y+=3;
+    doc.setFontSize(10);
+    doc.text('Ringkasan:',14,y);y+=5;
+    doc.setFontSize(8);
+    const totalHPP=DB.produk.reduce((a,b)=>a+b.hpp,0);
+    const totalJual=DB.produk.reduce((a,b)=>a+b.hargaJual,0);
+    const totalLaba=DB.produk.reduce((a,b)=>a+b.laba,0);
+    const avgMargin=DB.produk.reduce((a,b)=>a+b.margin,0)/DB.produk.length;
+    doc.text(`Total Produk: ${DB.produk.length}`,14,y);y+=3.5;
+    doc.text(`Rata-rata HPP: ${Rp(totalHPP/DB.produk.length)}`,14,y);y+=3.5;
+    doc.text(`Rata-rata Harga Jual: ${Rp(totalJual/DB.produk.length)}`,14,y);y+=3.5;
+    doc.text(`Rata-rata Margin: ${avgMargin.toFixed(1)}%`,14,y);y+=3.5;
+    doc.text(`Total Potensi Laba: ${Rp(totalLaba)}`,14,y);
+  }
+
+  doc.save('HPP-PRO-Karya-Bakti-Cipta-Mandiri.pdf');
+  toast('PDF berhasil di-download');
+}
+
+window.exportExcel=()=>{
+  let csv='Nama Produk,Kategori,Satuan,Total Bahan Beli,Total Bahan Pakai,Biaya Opr,Kemasan,Lain-lain,HPP,Harga Jual,Margin %,Laba\n';
+  DB.produk.forEach(p=>{
+    csv+=`"${p.nama}",${p.kategori},${p.satuan},${p.totalBahanBeli},${p.totalBahanPakai},${p.biayaOpr},${p.biayaKemasan},${p.biayaLain},${p.hpp},${p.hargaJual},${p.margin},${p.laba}\n`;
+    csv+='"Detail Bahan:",,,,,,,,,,,\n';
+    csv+='"Nama Bahan","Qty Beli","Satuan Beli","Harga Beli","Qty Pakai","Satuan Pakai","Subtotal Beli","Subtotal Pakai","Catatan",,,,\n';
+    p.bahan.forEach(b=>{
+      csv+=`"${b.nama}",${b.qtyBeli},"${b.satuanBeli}",${b.hargaBeli},${b.qtyPakai},"${b.satuanPakai}",${b.subtotalBeli},${b.subtotalPakai},"${b.catatan||''}",,,,\n`;
+    });
+    csv+=',,,,,,,,,,,\n';
+  });
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='HPP-PRO-Karya-Bakti-Cipta-Mandiri.csv';a.click();
+  URL.revokeObjectURL(url);
+  toast('Excel berhasil di-download');
+}
+
+hitungTotal();
+</script>
+</body>
+</html>
